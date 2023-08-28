@@ -119,7 +119,7 @@
                 } else {
                     let simpleTenR_greater = tenAverTrade;
                     let num = 1
-                    while (simpleTenR_greater <= wantedFloat / (10 ** dig)) {
+                    while (simpleTenR_greater >= wantedFloat / (10 ** dig)) {
 
                         simpleTenR_lower = tradeUp(getIeee754_32(nine_floats + getIeee754_32(simpleTenR_lower - num / (10 ** dig))), minFloat, maxFloat)
                         num++
