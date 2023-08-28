@@ -67,78 +67,80 @@
 
 
 
-        function check_Anime_Concentration(birthday_input_id) {
-            let maxFloat = document.getElementById("maxFloat").value
-            let minFloat = document.getElementById("minFloat").value
-            let wantedFloat = document.getElementById(birthday_input_id).value.replace('-', '').replace('-', '')
-            /*         let averFloat0_2=(wantedFloat-minFloat)/(maxFloat-minFloat)
-                    let averFloat00_2=(wantedFloat/10-minFloat)/(maxFloat-minFloat)
-                    let averFloat000_2=(wantedFloat/100-minFloat)/(maxFloat-minFloat) 
-                     */
-            let dig = 8
-            var averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
-            var finalFloats = []
-            ////////////////////////////////////get final_float
-            test_float(averFloat, dig, minFloat, maxFloat)
+            function check_Anime_Concentration(birthday_input_id) {
+                let maxFloat = document.getElementById("maxFloat").value
+                let minFloat = document.getElementById("minFloat").value
+                let wantedFloat = document.getElementById(birthday_input_id).value.replace('-', '').replace('-', '')
+                /*         let averFloat0_2=(wantedFloat-minFloat)/(maxFloat-minFloat)
+                        let averFloat00_2=(wantedFloat/10-minFloat)/(maxFloat-minFloat)
+                        let averFloat000_2=(wantedFloat/100-minFloat)/(maxFloat-minFloat) 
+                        */
+                let dig = 8
+                var averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
+                var finalFloats = []
+                ////////////////////////////////////get final_float
+                test_float(averFloat, dig, minFloat, maxFloat)
 
 
 
-            function nineFloats_repeate(averFloat, dig) {
-                let finalFloat = 0.00
-                for (let i = 0; i < 9; i++) {
-                    finalFloat = getIeee754_32(finalFloat + getIeee754_32(averFloat))
-                }
-                return finalFloat
-            }
-            ////////////////////////////////////test with final_float and nine_repeate
-            function tradeUp(totalFloat, minFloat, maxFloat) {
-                let tradeUpResult = getIeee754_32(getIeee754_32(getIeee754_32(totalFloat) / getIeee754_32(10)) * (getIeee754_32(maxFloat) - getIeee754_32(minFloat)) + getIeee754_32(minFloat))
-                return tradeUpResult
-            }
-
-            function test_float(averFloat, dig, minFloat, maxFloat) {
-                let nine_floats = nineFloats_repeate(averFloat, dig)
-
-                let tenAverTrade = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat)), minFloat, maxFloat)
-                if (String((tenAverTrade * 10 ** dig)).substr(0, dig) == wantedFloat) {
-                    finalFloats.push(tenAverTrade)
-
-                } else if (String((tenAverTrade * 10 ** dig)).substring(0, dig) <= wantedFloat) {
-                    let simpleTenR_lower = tenAverTrade;
-                    let num = 1
-                    while (simpleTenR_lower <= wantedFloat / (10 ** dig)) {
-
-                        simpleTenR_lower = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat + num / (10 ** dig))), minFloat, maxFloat)
-                        num++
-                        console.log(simpleTenR_lower.toFixed(16))
+                function nineFloats_repeate(averFloat, dig) {
+                    let finalFloat = 0.00
+                    for (let i = 0; i < 9; i++) {
+                        finalFloat = getIeee754_32(finalFloat + getIeee754_32(averFloat))
                     }
-                    if (String((simpleTenR_lower * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(simpleTenR_lower) } else { finalFloats.push('float between' + tenAverTrade + 'and' + simpleTenR_lower) }
+                    return finalFloat
+                }
+                ////////////////////////////////////test with final_float and nine_repeate
+                function tradeUp(totalFloat, minFloat, maxFloat) {
+                    let tradeUpResult = getIeee754_32(getIeee754_32(getIeee754_32(totalFloat) / getIeee754_32(10)) * (getIeee754_32(maxFloat) - getIeee754_32(minFloat)) + getIeee754_32(minFloat))
+                    return tradeUpResult
+                }
+
+                function test_float(averFloat, dig, minFloat, maxFloat) {
+                    let nine_floats = nineFloats_repeate(averFloat, dig)
+
+                    let tenAverTrade = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat)), minFloat, maxFloat)
+                    if (String((tenAverTrade * 10 ** dig)).substr(0, dig) == wantedFloat) {
+                        finalFloats.push(tenAverTrade)
+                        
+                    } else if (String((tenAverTrade * 10 ** dig)).substring(0, dig) <= wantedFloat) {
+                        let simpleTenR_lower = tenAverTrade;
+                        let num = 1
+                        while (simpleTenR_lower <= wantedFloat / (10 ** dig)) {
+
+                            simpleTenR_lower = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat + num / (10 ** dig))), minFloat, maxFloat)
+                            num++
+                            console.log(simpleTenR_lower.toFixed(16))
+                        }
+                        if (String((simpleTenR_lower * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(simpleTenR_lower) } else { finalFloats.push('float between' + tenAverTrade + 'and' + simpleTenR_lower) }
 
 
 
-                } else {
-                    let simpleTenR_greater = tenAverTrade;
-                    let num = 1
-                    while (simpleTenR_greater >= wantedFloat / (10 ** dig)) {
-
-                        simpleTenR_lower = tradeUp(getIeee754_32(nine_floats + getIeee754_32(simpleTenR_lower - num / (10 ** dig))), minFloat, maxFloat)
-                        num++
+                    } else {
+                        let simpleTenR_greater = tenAverTrade;
+                        let num = 1
                         console.log(simpleTenR_greater)
-                    }
-                    if (String((simpleTenR_greater * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(simpleTenR_greater) } else { finalFloats.push('float between' + tenAverTrade + 'and' + simpleTenR_greater) }
-
-
-
-
-
-                }
-
-
-
-                console.log(finalFloats[0])
-                document.getElementById("outPut_queryFloat").innerText=finalFloats[0]
+    
+                        while(simpleTenR_greater>=wantedFloat/(10**dig)){
+                
+                simpleTenR_greater=tradeUp( getIeee754_32(nine_floats+getIeee754_32(averFloat-num/(10**dig))),minFloat,maxFloat)
+                num++
+                console.log(simpleTenR_greater)
             }
-        }
+                        if (String((simpleTenR_greater * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(simpleTenR_greater) } else { finalFloats.push('float between' + tenAverTrade + 'and' + simpleTenR_greater) }
+
+
+
+
+
+                    }
+
+
+
+                    console.log(finalFloats[0])
+                    document.getElementById("outPut_queryFloat").innerText=finalFloats[0]
+                }
+            }
 
     </script>
 </body>
